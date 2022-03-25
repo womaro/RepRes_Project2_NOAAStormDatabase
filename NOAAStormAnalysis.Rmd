@@ -58,7 +58,7 @@ data_read_grouped_head <- head(data_read_grouped, 5)
 Let´s see it in a plot:
 
 ```{r}
-barplot(data_read_grouped_head$TOTAL_FATAL, names.arg = data_read_grouped_head$EVTYPE)
+barplot(data_read_grouped_head$TOTAL_FATAL, names.arg = data_read_grouped_head$EVTYPE, main = "5 top most severe weather events")
 ```
 
 Now, for second question, we will try to answer which event brings the biggest cost impact. To do that, we will prepare similar data set as above, however we will sum over TOTAL_DEMAGE
@@ -71,7 +71,7 @@ data_read_grouped_head_dmg <- head(data_read_grouped_dmg, 5)
 Again, lets see it in the plot:
 
 ```{r}
-barplot(data_read_grouped_head_dmg$TOTAL_DEMAGE, names.arg = data_read_grouped_head$EVTYPE)
+barplot(data_read_grouped_head_dmg$TOTAL_DEMAGE, names.arg = data_read_grouped_head$EVTYPE, main = "5 top most costly weather events")
 ```
 
 
