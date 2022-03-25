@@ -1,0 +1,71 @@
+---
+title: "NOAA Storm Database - severe weather events analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,  echo=FALSE}
+library(utils)
+library(dplyr)
+library(ggplot2)  
+```
+
+
+## Synopis
+
+This document presents analysis of NOAA ( U.S. National Oceanic and Atmospheric Administration's) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete. 
+
+Following below analysis there has been several outcomes, and thees are:
+
+## Data Processing
+
+1. First, lets download the data, unzip and assign to R placeholder
+```{r, cache=TRUE}
+data_source <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+data_dest <- paste(getwd(), "/repdata_Fdata_FStormData.csv.bz2", sep = "")
+download.file(data_source, data_dest)
+
+data_read <- read.table(data_dest, header = TRUE, sep = ",")
+```
+
+At this point, there is no preprocessing of data, and those are loaded in raw form do dataframe for further analysis. 
+
+2. Let´s now check how data looks like
+
+```{r}
+head(data_read, 3)
+summary(data_read)
+```
+
+## Result
+
+For first question of which event type is most severe when it comes to injured or deadly cases, we will combine both values of "FATALITIES" and "INJURIES" and quantify severeness by sum of both. To do that, we will create yet another variable in a given dataframe by following below transformation code: 
+
+```{r, }
+data_read <- data_read %>% mutate(FATALITY = FATALITIES + INJURIES)
+```
+
+Now, let´s check which event type is most severe. To do that, we will group by EVTYPE and sumarise created variable (FATALITY) and sort descending by number of fatal incidents by runing below code:
+
+```{r}
+data_read_grouped <- data_read %>% group_by(EVTYPE)  %>% summarise(TOTAL_FATAL = sum(FATALITY)) %>% arrange(desc(TOTAL_FATAL))
+data_read_grouped_dmg <- data_read %>% group_by(EVTYPE)  %>% summarise(TOTAL_DEMAGE = sum(PROPDMG)) %>% arrange(desc(TOTAL_DEMAGE))
+data_read_grouped_head <- head(data_read_grouped, 5)
+data_read_grouped_head_dmg <- head(data_read_grouped_dmg, 5)
+```
+
+Let´s see it in a plot:
+
+```{r}
+barplot(data_read_grouped_head$TOTAL_FATAL, names.arg = data_read_grouped_head$EVTYPE)
+```
+
+```{r}
+barplot(data_read_grouped_head_dmg$TOTAL_DEMAGE, names.arg = data_read_grouped_head$EVTYPE)
+```
+
+
+We can see, that Tornado is by far the most severe type of weather event, causing around 10 times more cases, than next in a row. 

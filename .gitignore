@@ -29,6 +29,8 @@ vignettes/*.pdf
 
 # knitr and R markdown default cache directories
 *_cache/
+*cache/
+*files/
 /cache/
 
 # Temporary files created by R markdown
@@ -37,3 +39,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+repdata_Fdata_FStormData.csv.bz2
+*.Rproj
+*.Rhistory
+NOAAStormAnalysis_files/
+NOAAStormAnalysis_cache/
