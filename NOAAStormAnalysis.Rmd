@@ -18,7 +18,7 @@ library(ggplot2)
 
 This document presents analysis of NOAA ( U.S. National Oceanic and Atmospheric Administration's) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete. 
 
-Following below analysis there has been several outcomes, and thees are:
+Following below analysis there has been a one imporant outcome, that leads to conclusion, that tornado is by far the most severe event, when it comes to fatality and also the one, that brings the biggest cost implication, when hit. 
 
 ## Data Processing
 
@@ -52,9 +52,7 @@ Now, let´s check which event type is most severe. To do that, we will group by 
 
 ```{r}
 data_read_grouped <- data_read %>% group_by(EVTYPE)  %>% summarise(TOTAL_FATAL = sum(FATALITY)) %>% arrange(desc(TOTAL_FATAL))
-data_read_grouped_dmg <- data_read %>% group_by(EVTYPE)  %>% summarise(TOTAL_DEMAGE = sum(PROPDMG)) %>% arrange(desc(TOTAL_DEMAGE))
 data_read_grouped_head <- head(data_read_grouped, 5)
-data_read_grouped_head_dmg <- head(data_read_grouped_dmg, 5)
 ```
 
 Let´s see it in a plot:
@@ -63,9 +61,18 @@ Let´s see it in a plot:
 barplot(data_read_grouped_head$TOTAL_FATAL, names.arg = data_read_grouped_head$EVTYPE)
 ```
 
+Now, for second question, we will try to answer which event brings the biggest cost impact. To do that, we will prepare similar data set as above, however we will sum over TOTAL_DEMAGE
+
+```{r}
+data_read_grouped_dmg <- data_read %>% group_by(EVTYPE)  %>% summarise(TOTAL_DEMAGE = sum(PROPDMG)) %>% arrange(desc(TOTAL_DEMAGE))
+data_read_grouped_head_dmg <- head(data_read_grouped_dmg, 5)
+```
+
+Again, lets see it in the plot:
+
 ```{r}
 barplot(data_read_grouped_head_dmg$TOTAL_DEMAGE, names.arg = data_read_grouped_head$EVTYPE)
 ```
 
 
-We can see, that Tornado is by far the most severe type of weather event, causing around 10 times more cases, than next in a row. 
+We can see, that Tornado is by far the most severe type of weather event, causing around 10 times more cases, than next in a row. Similarly, it is also event, that creates the bigest cost impact. 
